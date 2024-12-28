@@ -3,13 +3,9 @@ import { Text, View } from "react-native";
 export default function Index() {
   return (
     <View
-      style={{
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-      }}
+      className="flex items-center justify-center h-screen bg-gray-700"
     >
-      <Text>Cryptogram</Text>
+      <Text className="p-2.5 rounded-full bg-indigo-500">Cryptogram</Text>
     </View>
   );
 }

@@ -1,18 +1,20 @@
-import { Link } from 'expo-router'
-import { SafeAreaView, Text } from 'react-native'
+import BodyText from "@/components/common/BodyText";
+import TitleText from "@/components/common/TitleText";
+import { getRandomQuote } from "@/service/dataset";
+import { SafeAreaView, View } from "react-native";
 
 export default function Game() {
+  const quote = getRandomQuote();
 
   return (
-    <SafeAreaView
-      className="flex justify-center items-center  h-screen bg-sky-200"
-    >
-      <Text className="text-4xl font-bold text-sky-900">Game Screen</Text>
+    <SafeAreaView className="w-full h-screen bg-black">
+      <View className="w-full p-5">
+        <TitleText>Quote</TitleText>
+      </View>
 
-      <Link href="/" className="mt-4">
-        Go Back
-      </Link>
+      <View>
+        <BodyText>{quote.quote}</BodyText>
+      </View>
     </SafeAreaView>
-  )
-
+  );
 }

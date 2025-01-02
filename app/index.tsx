@@ -5,7 +5,7 @@ import { View, Image, TouchableOpacity } from "react-native";
 import BodyText from "@/components/common/BodyText";
 import TitleText from "@/components/common/TitleText";
 
-import backgroundImg from "@/assets/images/background/cryptogram-bg.jpg";
+import backgroundImg from "@/assets/images/cryptogram-bg.jpg";
 
 export default function Homescreen() {
   const handleStartGame = () => {

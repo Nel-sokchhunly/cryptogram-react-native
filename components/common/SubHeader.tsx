@@ -1,11 +1,11 @@
 import { Text, TextProps } from "react-native";
 
-export default function TitleText({ children, ...props }: TextProps) {
+export default function SubHeaderText({ children, ...props }: TextProps) {
   return (
     <Text
       style={{
         fontFamily: "Jost_500Medium",
-        fontSize: 32,
+        fontSize: 24,
         color: "white",
         letterSpacing: 1,
       }}

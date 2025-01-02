@@ -1,11 +1,6 @@
-import { Text } from "react-native";
-import { useFonts, Jost_400Regular } from "@expo-google-fonts/jost";
+import { Text, TextProps } from "react-native";
 
-export default function BodyText({ children }: { children: string }) {
-  let [fontsLoaded] = useFonts({
-    Jost_400Regular,
-  });
-
+export default function BodyText({ children, ...props }: TextProps) {
   return (
     <Text
       style={{

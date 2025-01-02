@@ -1,5 +1,6 @@
 import dataset from "@/assets/data/quotes.json";
 import { Quote } from "@/types/qoute";
+import { trimSymbolAtEnd } from "@/utils/qoute";
 
 export function getRandomQuote(): Quote {
   const randomIndex = Math.floor(Math.random() * dataset.length - 1).toString();
@@ -12,10 +13,14 @@ export function getRandomQuote(): Quote {
     return getRandomQuote();
   }
 
+  if (quote.length > 100) {
+    return getRandomQuote();
+  }
+
   return {
     idx: randomIndex,
-    quote,
-    author,
+    quote: quote.toLocaleUpperCase(),
+    author: trimSymbolAtEnd(author),
     tags: dataset.tags[randomIndex as keyof typeof dataset.tags],
   };
 }

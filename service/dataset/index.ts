@@ -13,7 +13,7 @@ export function getRandomQuote(): Quote {
     return getRandomQuote();
   }
 
-  if (quote.length > 100) {
+  if (quote.length > 50) {
     return getRandomQuote();
   }
 

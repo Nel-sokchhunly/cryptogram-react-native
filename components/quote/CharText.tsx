@@ -75,7 +75,6 @@ export default function CharText({
           ]}
           // autoFocus
           maxLength={1}
-          returnKeyType="next"
           onFocus={() => setIsFocused(true)}
           onBlur={() => setIsFocused(false)}
           value={input || ""}

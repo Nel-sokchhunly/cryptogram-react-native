@@ -14,11 +14,17 @@ export default function CharText({
   inputValue,
   onInputChange,
   shiftAmount,
+  guessDiff, // difference between the guess and the correct answer
+  showCheck,
+  darkMode = true,
 }: {
   char: string;
   inputValue: string | null;
   onInputChange: (char: string, input: string) => void;
   shiftAmount: number;
+  guessDiff?: number;
+  showCheck: boolean;
+  darkMode?: boolean;
 }) {
   const [input, setInput] = useState(inputValue);
   const [isFocused, setIsFocused] = useState(false);
@@ -63,14 +69,41 @@ export default function CharText({
     ((char.charCodeAt(0) - 65 + shiftAmount + 26) % 26) + 65
   );
 
+  const diffStyle = () => {
+    if (guessDiff === undefined || !showCheck) return;
+    console.log("====================================");
+    console.log("guessDiff", guessDiff);
+    console.log("====================================");
+    if (guessDiff <= 3) {
+      return styles.range3Diff;
+    }
+    if (guessDiff <= 6) {
+      return styles.range6Diff;
+    }
+    if (guessDiff <= 10) {
+      return styles.range10Diff;
+    }
+    if (guessDiff > 10) {
+      return styles.notInRangeDiff;
+    }
+  };
+
   return (
-    <View style={styles.container}>
+    <View style={[styles.container]}>
       <View className="w-fit h-fit relative">
         <TextInput
           style={[
             styles.input,
             {
-              borderColor: isFocused ? "yellow" : "white",
+              borderColor: darkMode ? "white" : "black",
+              color: darkMode ? "white" : "black",
+            },
+            diffStyle(),
+            isFocused && {
+              backgroundColor: "transparent",
+              color: "white",
+              borderColor: "yellow",
+              borderWidth: 1,
             },
           ]}
           // autoFocus
@@ -102,7 +135,16 @@ export default function CharText({
         />
       </View>
 
-      <Text style={styles.text}>{shiftedChar}</Text>
+      <Text
+        style={[
+          styles.text,
+          {
+            color: darkMode ? "white" : "black",
+          },
+        ]}
+      >
+        {shiftedChar}
+      </Text>
     </View>
   );
 }
@@ -110,22 +152,19 @@ export default function CharText({
 const styles = StyleSheet.create({
   container: {
     padding: 1,
-
-    paddingBottom: 10,
+    marginBottom: 10,
   },
+
   text: {
-    color: "white",
     fontSize: 20,
     fontFamily: "Jost_600Black",
     textAlign: "center",
   },
 
   input: {
-    borderColor: "white",
     borderWidth: 1,
     borderRadius: 2,
-    color: "white",
-    width: 20,
+    width: 22,
     height: 25,
     fontSize: 20,
     textAlign: "center",
@@ -144,5 +183,26 @@ const styles = StyleSheet.create({
     height: "100%",
     borderRadius: 2,
     backgroundColor: "yellow",
+  },
+
+  notInRangeDiff: {
+    backgroundColor: "#E74C3C", // red
+    color: "black",
+    borderWidth: 0,
+  },
+  range10Diff: {
+    backgroundColor: "#85C1E9", // blue
+    color: "black",
+    borderWidth: 0,
+  },
+  range6Diff: {
+    backgroundColor: "#F5B041", // yellow
+    color: "black",
+    borderWidth: 0,
+  },
+  range3Diff: {
+    backgroundColor: "#2ECC71", // green
+    color: "black",
+    borderWidth: 0,
   },
 });

@@ -2,19 +2,28 @@ import { router } from "expo-router";
 
 import { useEffect } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { View, TouchableOpacity, Animated, useAnimatedValue } from "react-native";
+import {
+  View,
+  TouchableOpacity,
+  Animated,
+  useAnimatedValue,
+} from "react-native";
 import BodyText from "@/components/common/BodyText";
 import TitleText from "@/components/common/TitleText";
-
+import { gameActions } from "@/store/gameSlicer";
 import backgroundImg from "@/assets/images/cryptogram-bg.jpg";
+import { useDispatch } from "react-redux";
 
 export default function Homescreen() {
+  const dispatch = useDispatch();
+
   const handleStartGame = () => {
+    dispatch(gameActions.startGame());
     router.push("/game");
   };
 
-  const scaleAnim = useAnimatedValue(0.9)
-  const opacityAnim = useAnimatedValue(0.2)
+  const scaleAnim = useAnimatedValue(0.9);
+  const opacityAnim = useAnimatedValue(0.2);
 
   const startScaleAnim = () => {
     Animated.loop(
@@ -30,7 +39,6 @@ export default function Homescreen() {
             duration: 10000,
             useNativeDriver: true,
           }),
-
         ]),
         Animated.parallel([
           Animated.timing(scaleAnim, {
@@ -43,24 +51,22 @@ export default function Homescreen() {
             duration: 10000,
             useNativeDriver: true,
           }),
-
-        ])
-      ]),
+        ]),
+      ])
     ).start();
-  }
+  };
 
   const stopScaleAnim = () => {
     scaleAnim.setValue(1);
-  }
-
+  };
 
   useEffect(() => {
     startScaleAnim();
 
     return () => {
       stopScaleAnim();
-    }
-  }, [])
+    };
+  }, []);
 
   return (
     <SafeAreaView className="flex justify-center items-center h-screen bg-black ">

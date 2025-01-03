@@ -1,6 +1,7 @@
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { Stack } from "expo-router";
 import { Toasts } from "@backpackapp-io/react-native-toast";
+import { Provider } from "react-redux";
 
 import "./global.css";
 import {
@@ -25,6 +26,7 @@ import {
   Jost_900Black_Italic,
 } from "@expo-google-fonts/jost";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
+import store from "@/store";
 
 export default function RootLayout() {
   useFonts({
@@ -49,20 +51,22 @@ export default function RootLayout() {
   });
 
   return (
-    <GestureHandlerRootView>
-      <BottomSheetModalProvider>
-        <Stack
-          screenOptions={{
-            headerShown: false,
-          }}
-        >
-          <Stack.Screen name="index" />
-          <Stack.Screen name="game" />
-        </Stack>
+    <Provider store={store}>
+      <GestureHandlerRootView>
+        <BottomSheetModalProvider>
+          <Stack
+            screenOptions={{
+              headerShown: false,
+            }}
+          >
+            <Stack.Screen name="index" />
+            <Stack.Screen name="game" />
+          </Stack>
 
-        {/* toast */}
-        <Toasts />
-      </BottomSheetModalProvider>
-    </GestureHandlerRootView>
+          {/* toast */}
+          <Toasts />
+        </BottomSheetModalProvider>
+      </GestureHandlerRootView>
+    </Provider>
   );
 }

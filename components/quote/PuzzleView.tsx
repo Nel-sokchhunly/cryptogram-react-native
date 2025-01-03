@@ -1,38 +1,23 @@
-import { Quote } from "@/types/qoute";
 import { View, StyleSheet } from "react-native";
 import { identifyCharType } from "@/utils/qoute";
 import Space from "./Space";
 import Symbol from "./Symbol";
-import { createRef, useEffect, useMemo, useRef, useState } from "react";
 import CharText from "./CharText";
-import { TextInput } from "react-native-gesture-handler";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/store";
+import { gameActions } from "@/store/gameSlicer";
 
-type AlphabetSet = Map<string, string | null>;
+export default function PuzzleView() {
+  const {
+    quote,
+    alphaInput,
+    quoteChars: chars,
+    shiftAmount,
+  } = useSelector((state: RootState) => state.gameMachine);
+  const dispatch = useDispatch();
 
-export default function PuzzleView({ quote }: { quote: Quote }) {
-  const [alphaInput, setAlphaInput] = useState<AlphabetSet>(new Map());
-  const chars = useMemo(() => quote.quote.split(""), [quote.quote, alphaInput]);
-  const shiftAmount = useMemo(() => {
-    // how many number of character to shift the actual character to decrypted the text
-    // random from -10 to 10 and not 0
-    const shiftAmount = Math.floor(Math.random() * 20) - 10;
-    return shiftAmount;
-  }, [quote]);
-
-  useEffect(() => {
-    const alphas = new Map() as AlphabetSet;
-
-    chars.forEach((char) => {
-      if (identifyCharType(char) === "alphabet") {
-        alphas.set(char, null);
-      }
-    });
-
-    setAlphaInput(alphas);
-  }, [quote.quote]);
-
-  if (!chars) {
-    return;
+  if (!quote) {
+    return null;
   }
 
   return (
@@ -46,15 +31,13 @@ export default function PuzzleView({ quote }: { quote: Quote }) {
               <CharText
                 key={index}
                 char={letter}
-                inputValue={alphaInput.get(letter) || null}
+                inputValue={alphaInput[letter]?.inputValue || null}
                 shiftAmount={shiftAmount}
-                onInputChange={(char, input) => {
-                  setAlphaInput((prev) => {
-                    const newMap = new Map(prev);
-                    newMap.set(char, input);
-                    return newMap;
-                  });
-                }}
+                guessDiff={alphaInput[letter]?.guessDiff}
+                showCheck={alphaInput[letter]?.showCheck || false}
+                onInputChange={(char, input) =>
+                  dispatch(gameActions.updateAlphaInput({ char, input }))
+                }
               />
             );
           case "space":

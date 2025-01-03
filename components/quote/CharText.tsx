@@ -71,9 +71,6 @@ export default function CharText({
 
   const diffStyle = () => {
     if (guessDiff === undefined || !showCheck) return;
-    console.log("====================================");
-    console.log("guessDiff", guessDiff);
-    console.log("====================================");
     if (guessDiff <= 3) {
       return styles.range3Diff;
     }

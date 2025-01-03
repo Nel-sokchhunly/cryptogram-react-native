@@ -6,7 +6,7 @@ import PuzzleView from "@/components/quote/PuzzleView";
 import BackgroundBtn from "@/components/common/BackgroundBtn";
 import GameHelp from "@/components/game/GameHelp";
 
-import { SafeAreaView, TouchableOpacity, View } from "react-native";
+import { SafeAreaView, TouchableOpacity, View, Keyboard } from "react-native";
 import { ChevronLeftIcon } from "react-native-heroicons/outline";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store";
@@ -16,7 +16,10 @@ export default function Game() {
   const dispatch = useDispatch();
   const { quote } = useSelector((state: RootState) => state.gameMachine);
 
-  const handleCheck = () => dispatch(gameActions.checkAnswer());
+  const handleCheck = () => {
+    Keyboard.dismiss();
+    dispatch(gameActions.checkAnswer());
+  };
 
   if (!quote)
     return (

@@ -1,3 +1,4 @@
+import { gameActions } from "@/store/gameSlicer";
 import { toast } from "@backpackapp-io/react-native-toast";
 import React, { useEffect, useState } from "react";
 import {
@@ -8,6 +9,7 @@ import {
   useAnimatedValue,
   Animated,
 } from "react-native";
+import { useDispatch } from "react-redux";
 
 export default function CharText({
   char,
@@ -17,6 +19,7 @@ export default function CharText({
   guessDiff, // difference between the guess and the correct answer
   showCheck,
   darkMode = true,
+  isFocused,
 }: {
   char: string;
   inputValue: string | null;
@@ -25,9 +28,10 @@ export default function CharText({
   guessDiff?: number;
   showCheck: boolean;
   darkMode?: boolean;
+  isFocused?: boolean;
 }) {
   const [input, setInput] = useState(inputValue);
-  const [isFocused, setIsFocused] = useState(false);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     setInput(inputValue);
@@ -53,6 +57,13 @@ export default function CharText({
   };
   const stopPulsing = () => {
     fadeAnim.setValue(0);
+  };
+
+  const handleOnFocus = () => {
+    dispatch(gameActions.onAlphaInputFocus(char));
+  };
+  const handleOnBlur = () => {
+    dispatch(gameActions.onAlphaInputBlur(char));
   };
 
   useEffect(() => {
@@ -105,8 +116,8 @@ export default function CharText({
           ]}
           // autoFocus
           maxLength={1}
-          onFocus={() => setIsFocused(true)}
-          onBlur={() => setIsFocused(false)}
+          onFocus={handleOnFocus}
+          onBlur={handleOnBlur}
           value={input || ""}
           autoCapitalize="characters"
           onChange={(e) => {

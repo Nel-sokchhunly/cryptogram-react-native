@@ -27,14 +27,17 @@ export default function PuzzleView() {
 
         switch (type) {
           case "alphabet":
+            const item = alphaInput[letter];
+            if (!item) return null;
             return (
               <CharText
                 key={index}
                 char={letter}
-                inputValue={alphaInput[letter]?.inputValue || null}
+                inputValue={item.inputValue || null}
                 shiftAmount={shiftAmount}
-                guessDiff={alphaInput[letter]?.guessDiff}
-                showCheck={alphaInput[letter]?.showCheck || false}
+                guessDiff={item.guessDiff}
+                showCheck={item.showCheck || false}
+                isFocused={item.isFocused || false}
                 onInputChange={(char, input) =>
                   dispatch(gameActions.updateAlphaInput({ char, input }))
                 }

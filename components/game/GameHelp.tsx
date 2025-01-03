@@ -118,9 +118,10 @@ export default function GameHelp() {
             </View>
           </View>
           <BodyText style={styles.bodyText}>
-            - G is 14 positions away from W{"\n"}- Y is 10 positions away from O
-            {"\n"}- X is 6 positions away from R{"\n"}- F is 2 positions away
-            from D
+            - RED: Incorrect letter correct letter
+            {"\n"}- BLUE: Within 10 range of correct letter
+            {"\n"}- YELLOW: Within 6 range of correct letter
+            {"\n"}- GREEN: Within 3 range of correct letter
           </BodyText>
         </BottomSheetView>
       </BottomSheetModal>

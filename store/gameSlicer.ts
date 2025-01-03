@@ -1,23 +1,8 @@
 // game state machine
 import { getRandomQuote } from "@/service/dataset";
-import { Quote } from "@/types/qoute";
 import { identifyCharType } from "@/utils/qoute";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-
-interface AlphabetCheckSet {
-  [key: string]: {
-    inputValue: string;
-    guessDiff: number | undefined;
-    showCheck: boolean;
-  } | null;
-}
-
-interface GameState {
-  quote: Quote | null;
-  quoteChars: string[]; // the characters of the quote
-  alphaInput: AlphabetCheckSet;
-  shiftAmount: number;
-}
+import { AlphabetCheckItem, AlphabetCheckSet, GameState } from "@/types/game";
 
 const gameState: GameState = {
   quote: null,
@@ -41,7 +26,12 @@ export const gameSlice = createSlice({
       const alphas = {} as AlphabetCheckSet;
       chars.forEach((char) => {
         if (identifyCharType(char) === "alphabet") {
-          alphas[char] = null;
+          alphas[char] = {
+            inputValue: "",
+            guessDiff: undefined,
+            showCheck: false,
+            isFocused: false,
+          };
         }
       });
       state.alphaInput = alphas;
@@ -55,6 +45,25 @@ export const gameSlice = createSlice({
           newMap[key].showCheck = true;
         }
       }
+      state.alphaInput = newMap;
+    },
+
+    onAlphaInputFocus: (state, payload: PayloadAction<string>) => {
+      const newMap = JSON.parse(JSON.stringify(state.alphaInput));
+      const char = payload.payload;
+      console.log("onAlphaInputFocus", char);
+      console.log(newMap);
+
+      newMap[char].isFocused = true;
+
+      state.alphaInput = newMap;
+    },
+    onAlphaInputBlur: (state, payload: PayloadAction<string>) => {
+      const newMap = JSON.parse(JSON.stringify(state.alphaInput));
+      const char = payload.payload;
+
+      newMap[char].isFocused = false;
+
       state.alphaInput = newMap;
     },
 
@@ -74,11 +83,14 @@ export const gameSlice = createSlice({
         ? Math.abs(input.charCodeAt(0) - char.charCodeAt(0))
         : undefined;
 
+      const currentChar = newMap[char];
+
       newMap[char] = {
+        ...currentChar,
         inputValue: input,
         guessDiff,
         showCheck: false,
-      };
+      } satisfies AlphabetCheckItem;
 
       state.alphaInput = newMap;
     },

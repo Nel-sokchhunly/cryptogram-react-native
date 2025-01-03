@@ -13,8 +13,8 @@ export default function Homescreen() {
     router.push("/game");
   };
 
-  const scaleAnim = useAnimatedValue(0.7)
-  const opacityAnim = useAnimatedValue(0.1)
+  const scaleAnim = useAnimatedValue(0.9)
+  const opacityAnim = useAnimatedValue(0.2)
 
   const startScaleAnim = () => {
     Animated.loop(
@@ -34,12 +34,12 @@ export default function Homescreen() {
         ]),
         Animated.parallel([
           Animated.timing(scaleAnim, {
-            toValue: 0.7,
+            toValue: 0.9,
             duration: 10000,
             useNativeDriver: true,
           }),
           Animated.timing(opacityAnim, {
-            toValue: 0.1,
+            toValue: 0.2,
             duration: 10000,
             useNativeDriver: true,
           }),

@@ -24,6 +24,7 @@ import {
   Jost_800ExtraBold_Italic,
   Jost_900Black_Italic,
 } from "@expo-google-fonts/jost";
+import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 
 export default function RootLayout() {
   useFonts({
@@ -49,17 +50,19 @@ export default function RootLayout() {
 
   return (
     <GestureHandlerRootView>
-      <Stack
-        screenOptions={{
-          headerShown: false,
-        }}
-      >
-        <Stack.Screen name="index" />
-        <Stack.Screen name="game" />
-      </Stack>
+      <BottomSheetModalProvider>
+        <Stack
+          screenOptions={{
+            headerShown: false,
+          }}
+        >
+          <Stack.Screen name="index" />
+          <Stack.Screen name="game" />
+        </Stack>
 
-      {/* toast */}
-      <Toasts />
+        {/* toast */}
+        <Toasts />
+      </BottomSheetModalProvider>
     </GestureHandlerRootView>
   );
 }

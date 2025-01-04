@@ -13,6 +13,8 @@ import TitleText from "@/components/common/TitleText";
 import { gameActions } from "@/store/gameSlicer";
 import backgroundImg from "@/assets/images/cryptogram-bg.jpg";
 import { useDispatch } from "react-redux";
+import GameHelpBottomSheet from "@/components/game/GameHelp";
+import { QuestionMarkCircleIcon } from "react-native-heroicons/outline";
 
 export default function Homescreen() {
   const dispatch = useDispatch();
@@ -83,10 +85,21 @@ export default function Homescreen() {
         />
       </View>
 
-      <View className="h-2/5 flex justify-center items-center">
+      <View className="h-2/5 flex justify-center items-center gap-10">
         <TouchableOpacity onPress={handleStartGame}>
           <BodyText>Start Game</BodyText>
         </TouchableOpacity>
+        <GameHelpBottomSheet>
+          <View
+            style={{
+              padding: 2,
+              backgroundColor: "white",
+              borderRadius: "50%",
+            }}
+          >
+            <QuestionMarkCircleIcon size={40} color="black" />
+          </View>
+        </GameHelpBottomSheet>
       </View>
     </SafeAreaView>
   );

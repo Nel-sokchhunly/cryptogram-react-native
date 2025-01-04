@@ -4,13 +4,16 @@ import SubHeaderText from "@/components/common/SubHeader";
 import TitleText from "@/components/common/TitleText";
 import PuzzleView from "@/components/quote/PuzzleView";
 import BackgroundBtn from "@/components/common/BackgroundBtn";
-import GameHelp from "@/components/game/GameHelp";
 
 import { SafeAreaView, TouchableOpacity, View, Keyboard } from "react-native";
-import { ChevronLeftIcon } from "react-native-heroicons/outline";
+import {
+  ChevronLeftIcon,
+  QuestionMarkCircleIcon,
+} from "react-native-heroicons/outline";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store";
 import { gameActions } from "@/store/gameSlicer";
+import GameHelpBottomSheet from "@/components/game/GameHelp";
 
 export default function Game() {
   const dispatch = useDispatch();
@@ -49,7 +52,9 @@ export default function Game() {
       <View className="w-full p-5 flex flex-row justify-between items-center">
         <TitleText>Quote</TitleText>
 
-        <GameHelp />
+        <GameHelpBottomSheet>
+          <QuestionMarkCircleIcon size={28} color="white" />
+        </GameHelpBottomSheet>
       </View>
 
       <PuzzleView />

@@ -3,6 +3,7 @@ import { getRandomQuote } from "@/service/dataset";
 import { identifyCharType } from "@/utils/qoute";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AlphabetCheckItem, AlphabetCheckSet, GameState } from "@/types/game";
+import { toast } from "@backpackapp-io/react-native-toast";
 
 const gameState: GameState = {
   quote: null,
@@ -27,7 +28,8 @@ export const gameSlice = createSlice({
       chars.forEach((char) => {
         if (identifyCharType(char) === "alphabet") {
           alphas[char] = {
-            inputValue: "",
+            // inputValue: "",
+            inputValue: char,
             guessDiff: undefined,
             showCheck: false,
             isFocused: false,
@@ -39,34 +41,59 @@ export const gameSlice = createSlice({
 
     checkAnswer: (state) => {
       // loop through the alphaInput and change the showCheck to true
-      const newMap = JSON.parse(JSON.stringify(state.alphaInput));
+      const newMap = JSON.parse(
+        JSON.stringify(state.alphaInput)
+      ) as AlphabetCheckSet;
+
       for (const key in newMap) {
-        if (newMap[key]) {
+        const char = newMap[key];
+        if (char) {
+          const guessDiff = char.inputValue
+            ? Math.abs(char.inputValue.charCodeAt(0) - key.charCodeAt(0))
+            : undefined;
+
           newMap[key].showCheck = true;
+          newMap[key].guessDiff = guessDiff;
         }
       }
       state.alphaInput = newMap;
+
+      // form the answer string
+      const answer = state.quoteChars
+        .map((char) => {
+          if (identifyCharType(char) === "alphabet") {
+            return newMap[char].inputValue;
+          }
+          return char;
+        })
+        .join("");
+
+      if (answer === state.quote!.quote) {
+        // correct answer
+        toast("Correct!");
+      }
     },
 
     onAlphaInputFocus: (state, payload: PayloadAction<string>) => {
-      const newMap = JSON.parse(JSON.stringify(state.alphaInput));
+      const newMap = JSON.parse(
+        JSON.stringify(state.alphaInput)
+      ) as AlphabetCheckSet;
       const char = payload.payload;
-      console.log("onAlphaInputFocus", char);
-      console.log(newMap);
 
       newMap[char].isFocused = true;
 
       state.alphaInput = newMap;
     },
     onAlphaInputBlur: (state, payload: PayloadAction<string>) => {
-      const newMap = JSON.parse(JSON.stringify(state.alphaInput));
+      const newMap = JSON.parse(
+        JSON.stringify(state.alphaInput)
+      ) as AlphabetCheckSet;
       const char = payload.payload;
 
       newMap[char].isFocused = false;
 
       state.alphaInput = newMap;
     },
-
     updateAlphaInput: (
       state,
       payload: PayloadAction<{
@@ -74,21 +101,17 @@ export const gameSlice = createSlice({
         input: string;
       }>
     ) => {
-      const newMap = JSON.parse(JSON.stringify(state.alphaInput));
+      const newMap = JSON.parse(
+        JSON.stringify(state.alphaInput)
+      ) as AlphabetCheckSet;
       const input = payload.payload.input;
       const char = payload.payload.char;
-
-      // calculate the difference between the input and the correct answer
-      const guessDiff = input
-        ? Math.abs(input.charCodeAt(0) - char.charCodeAt(0))
-        : undefined;
 
       const currentChar = newMap[char];
 
       newMap[char] = {
         ...currentChar,
         inputValue: input,
-        guessDiff,
         showCheck: false,
       } satisfies AlphabetCheckItem;
 

@@ -1,7 +1,6 @@
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacityProps } from "react-native";
 import { useCallback, useRef, useState } from "react";
 import { TouchableOpacity } from "react-native";
-import { QuestionMarkCircleIcon } from "react-native-heroicons/outline";
 import { BottomSheetModal, BottomSheetView } from "@gorhom/bottom-sheet";
 import TitleText from "../common/TitleText";
 import BodyText from "../common/BodyText";
@@ -34,7 +33,11 @@ const Example = {
   shiftAmount: 2,
 };
 
-export default function GameHelp() {
+export default function GameHelpBottomSheet({
+  children,
+}: {
+  children: TouchableOpacityProps["children"];
+}) {
   const [modalState, setModalState] = useState(false);
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
 
@@ -55,7 +58,7 @@ export default function GameHelp() {
           modalState ? handleDismissModalPress() : handlePresentModalPress()
         }
       >
-        <QuestionMarkCircleIcon size={28} color="white" />
+        {children}
       </TouchableOpacity>
 
       {/* modal */}

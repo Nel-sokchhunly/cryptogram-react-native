@@ -17,4 +17,5 @@ export interface GameState {
   alphaInput: AlphabetCheckSet;
   shiftAmount: number;
   state: "idle" | "playing" | "ended";
+  timer: number;
 }

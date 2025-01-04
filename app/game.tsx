@@ -1,7 +1,6 @@
 import { router, useNavigation } from "expo-router";
 import BodyText from "@/components/common/BodyText";
 import SubHeaderText from "@/components/common/SubHeader";
-import TitleText from "@/components/common/TitleText";
 import PuzzleView from "@/components/quote/PuzzleView";
 import BackgroundBtn from "@/components/common/BackgroundBtn";
 
@@ -26,10 +25,11 @@ import { formatSeconds } from "@/utils/format";
 export default function Game() {
   const navigation = useNavigation();
   const dispatch = useDispatch();
-  const { quote, state: gameStatus } = useSelector(
-    (state: RootState) => state.gameMachine
-  );
-  const [timer, setTimer] = useState<number>(0);
+  const {
+    quote,
+    state: gameStatus,
+    timer,
+  } = useSelector((state: RootState) => state.gameMachine);
   const stopwatchTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   const handleCheck = () => {
@@ -55,7 +55,7 @@ export default function Game() {
   useEffect(() => {
     if (gameStatus === "playing") {
       stopwatchTimerRef.current = setInterval(() => {
-        setTimer((prev) => prev + 1);
+        dispatch(gameActions.incrementTimer());
       }, 1000);
     } else if (gameStatus === "ended") {
       if (stopwatchTimerRef.current) clearInterval(stopwatchTimerRef.current);

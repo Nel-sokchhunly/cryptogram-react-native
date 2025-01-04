@@ -121,7 +121,6 @@ export default function CharText({
           value={input || ""}
           autoCapitalize="characters"
           onChange={(e) => {
-            e.preventDefault();
             // only accept uppercase letter
             if (!/^[A-Z]*$/.test(e.nativeEvent.text)) {
               toast("Please Input Only Uppercase Letter");

@@ -3,7 +3,6 @@ import { getRandomQuote } from "@/service/dataset";
 import { identifyCharType } from "@/utils/qoute";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AlphabetCheckItem, AlphabetCheckSet, GameState } from "@/types/game";
-import { toast } from "@backpackapp-io/react-native-toast";
 
 const gameState: GameState = {
   quote: null,
@@ -11,6 +10,7 @@ const gameState: GameState = {
   alphaInput: {},
   shiftAmount: 0,
   state: "idle",
+  timer: 0,
 };
 
 export const gameSlice = createSlice({
@@ -34,11 +34,14 @@ export const gameSlice = createSlice({
             guessDiff: undefined,
             showCheck: false,
             isFocused: false,
-          };
+          } satisfies AlphabetCheckItem;
         }
       });
       state.alphaInput = alphas;
       state.state = "playing";
+    },
+    endGame: (state) => {
+      state.state = "ended";
     },
 
     checkAnswer: (state) => {
@@ -71,11 +74,16 @@ export const gameSlice = createSlice({
         .join("");
 
       if (answer === state.quote!.quote) {
-        // correct answer
-        state.state = "ended";
+        gameSlice.caseReducers.endGame(state);
       }
     },
 
+    incrementTimer: (state) => {
+      // update the game timer
+      state.timer += 1;
+    },
+
+    // handle the input change
     onAlphaInputFocus: (state, payload: PayloadAction<string>) => {
       const newMap = JSON.parse(
         JSON.stringify(state.alphaInput)

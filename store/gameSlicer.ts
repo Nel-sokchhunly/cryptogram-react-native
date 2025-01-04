@@ -3,6 +3,7 @@ import { getRandomQuote } from "@/service/dataset";
 import { identifyCharType } from "@/utils/qoute";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AlphabetCheckItem, AlphabetCheckSet, GameState } from "@/types/game";
+import { router } from "expo-router";
 
 const gameState: GameState = {
   quote: null,
@@ -11,6 +12,7 @@ const gameState: GameState = {
   shiftAmount: 0,
   state: "idle",
   timer: 0,
+  checkAttempts: 0,
 };
 
 export const gameSlice = createSlice({
@@ -42,10 +44,12 @@ export const gameSlice = createSlice({
     },
     endGame: (state) => {
       state.state = "ended";
+      router.push("/end");
     },
 
     checkAnswer: (state) => {
       // loop through the alphaInput and change the showCheck to true
+      state.checkAttempts += 1;
       const newMap = JSON.parse(
         JSON.stringify(state.alphaInput)
       ) as AlphabetCheckSet;

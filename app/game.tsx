@@ -29,6 +29,7 @@ export default function Game() {
     quote,
     state: gameStatus,
     timer,
+    checkAttempts,
   } = useSelector((state: RootState) => state.gameMachine);
   const stopwatchTimerRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -98,16 +99,38 @@ export default function Game() {
         <ChevronLeftIcon size={28} color="white" />
         <SubHeaderText>Back</SubHeaderText>
       </TouchableOpacity>
-      <View className="w-full p-5 flex flex-row justify-between items-center">
-        <View className="flex flex-row items-center ">
-          <SubHeaderText>Time: </SubHeaderText>
-          <SubHeaderText>
-            {Math.floor(timer / 60)}:{formatSeconds(timer % 60)}
-          </SubHeaderText>
+      <View
+        style={{
+          padding: 20,
+          width: "100%",
+          flexDirection: "row",
+          justifyContent: "space-between",
+          alignItems: "flex-start",
+        }}
+      >
+        <View>
+          <View className="flex flex-row items-center ">
+            <SubHeaderText>Time: </SubHeaderText>
+            <SubHeaderText>
+              {Math.floor(timer / 60)}:{formatSeconds(timer % 60)}
+            </SubHeaderText>
+          </View>
+          <View className="flex flex-row items-center ">
+            <SubHeaderText>Checks: </SubHeaderText>
+            <SubHeaderText>{checkAttempts}</SubHeaderText>
+          </View>
         </View>
 
         <GameHelpBottomSheet>
-          <QuestionMarkCircleIcon size={28} color="white" />
+          <View
+            style={{
+              padding: 2,
+              backgroundColor: "white",
+              borderRadius: "50%",
+            }}
+          >
+            <QuestionMarkCircleIcon size={40} color="black" />
+          </View>
         </GameHelpBottomSheet>
       </View>
 

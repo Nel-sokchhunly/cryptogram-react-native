@@ -18,4 +18,5 @@ export interface GameState {
   shiftAmount: number;
   state: "idle" | "playing" | "ended";
   timer: number;
+  checkAttempts: number;
 }

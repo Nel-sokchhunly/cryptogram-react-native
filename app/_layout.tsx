@@ -66,6 +66,12 @@ export default function RootLayout() {
                 gestureEnabled: false,
               }}
             />
+            <Stack.Screen
+              name="end"
+              options={{
+                gestureEnabled: false,
+              }}
+            />
           </Stack>
 
           {/* toast */}

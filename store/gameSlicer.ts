@@ -10,6 +10,7 @@ const gameState: GameState = {
   quoteChars: [],
   alphaInput: {},
   shiftAmount: 0,
+  state: "idle",
 };
 
 export const gameSlice = createSlice({
@@ -37,6 +38,7 @@ export const gameSlice = createSlice({
         }
       });
       state.alphaInput = alphas;
+      state.state = "playing";
     },
 
     checkAnswer: (state) => {
@@ -70,7 +72,7 @@ export const gameSlice = createSlice({
 
       if (answer === state.quote!.quote) {
         // correct answer
-        toast("Correct!");
+        state.state = "ended";
       }
     },
 

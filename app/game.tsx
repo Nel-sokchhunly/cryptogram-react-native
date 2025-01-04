@@ -14,15 +14,35 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store";
 import { gameActions } from "@/store/gameSlicer";
 import GameHelpBottomSheet from "@/components/game/GameHelp";
+import { useEffect, useRef, useState } from "react";
+import { formatSeconds } from "@/utils/format";
 
 export default function Game() {
   const dispatch = useDispatch();
-  const { quote } = useSelector((state: RootState) => state.gameMachine);
+  const { quote, state: gameStatus } = useSelector(
+    (state: RootState) => state.gameMachine
+  );
+  const [timer, setTimer] = useState<number>(0);
+  const stopwatchTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   const handleCheck = () => {
     Keyboard.dismiss();
     dispatch(gameActions.checkAnswer());
   };
+
+  useEffect(() => {
+    if (gameStatus === "playing") {
+      stopwatchTimerRef.current = setInterval(() => {
+        setTimer((prev) => prev + 1);
+      }, 1000);
+    } else if (gameStatus === "ended") {
+      if (stopwatchTimerRef.current) clearInterval(stopwatchTimerRef.current);
+    }
+
+    return () => {
+      if (stopwatchTimerRef.current) clearInterval(stopwatchTimerRef.current);
+    };
+  }, [gameStatus]);
 
   if (!quote)
     return (
@@ -50,7 +70,12 @@ export default function Game() {
         <SubHeaderText>Back</SubHeaderText>
       </TouchableOpacity>
       <View className="w-full p-5 flex flex-row justify-between items-center">
-        <TitleText>Quote</TitleText>
+        <View className="flex flex-row items-center ">
+          <SubHeaderText>Time: </SubHeaderText>
+          <SubHeaderText>
+            {Math.floor(timer / 60)}:{formatSeconds(timer % 60)}
+          </SubHeaderText>
+        </View>
 
         <GameHelpBottomSheet>
           <QuestionMarkCircleIcon size={28} color="white" />

@@ -16,4 +16,5 @@ export interface GameState {
   quoteChars: string[]; // the characters of the quote
   alphaInput: AlphabetCheckSet;
   shiftAmount: number;
+  state: "idle" | "playing" | "ended";
 }

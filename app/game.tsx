@@ -1,11 +1,17 @@
-import { router } from "expo-router";
+import { router, useNavigation } from "expo-router";
 import BodyText from "@/components/common/BodyText";
 import SubHeaderText from "@/components/common/SubHeader";
 import TitleText from "@/components/common/TitleText";
 import PuzzleView from "@/components/quote/PuzzleView";
 import BackgroundBtn from "@/components/common/BackgroundBtn";
 
-import { SafeAreaView, TouchableOpacity, View, Keyboard } from "react-native";
+import {
+  SafeAreaView,
+  TouchableOpacity,
+  View,
+  Keyboard,
+  Alert,
+} from "react-native";
 import {
   ChevronLeftIcon,
   QuestionMarkCircleIcon,
@@ -18,6 +24,7 @@ import { useEffect, useRef, useState } from "react";
 import { formatSeconds } from "@/utils/format";
 
 export default function Game() {
+  const navigation = useNavigation();
   const dispatch = useDispatch();
   const { quote, state: gameStatus } = useSelector(
     (state: RootState) => state.gameMachine
@@ -29,20 +36,6 @@ export default function Game() {
     Keyboard.dismiss();
     dispatch(gameActions.checkAnswer());
   };
-
-  useEffect(() => {
-    if (gameStatus === "playing") {
-      stopwatchTimerRef.current = setInterval(() => {
-        setTimer((prev) => prev + 1);
-      }, 1000);
-    } else if (gameStatus === "ended") {
-      if (stopwatchTimerRef.current) clearInterval(stopwatchTimerRef.current);
-    }
-
-    return () => {
-      if (stopwatchTimerRef.current) clearInterval(stopwatchTimerRef.current);
-    };
-  }, [gameStatus]);
 
   if (!quote)
     return (
@@ -57,6 +50,42 @@ export default function Game() {
         <BodyText>Loading...</BodyText>
       </View>
     );
+
+  // game timer
+  useEffect(() => {
+    if (gameStatus === "playing") {
+      stopwatchTimerRef.current = setInterval(() => {
+        setTimer((prev) => prev + 1);
+      }, 1000);
+    } else if (gameStatus === "ended") {
+      if (stopwatchTimerRef.current) clearInterval(stopwatchTimerRef.current);
+    }
+
+    return () => {
+      if (stopwatchTimerRef.current) clearInterval(stopwatchTimerRef.current);
+    };
+  }, [gameStatus]);
+
+  // prompt user to confirm leaving the game
+  useEffect(() => {
+    const unsubscribe = navigation.addListener("beforeRemove", (e) => {
+      e.preventDefault();
+      Alert.alert(
+        "Exit Game?",
+        "Your game progress will be lost if you leave now. Do you want to continue?",
+        [
+          { text: "Continue Playing", style: "cancel" },
+          {
+            text: "Leave Game",
+            style: "destructive",
+            onPress: () => navigation.dispatch(e.data.action),
+          },
+        ]
+      );
+    });
+
+    return unsubscribe;
+  }, [navigation]);
 
   return (
     <SafeAreaView className="w-full h-screen bg-black">

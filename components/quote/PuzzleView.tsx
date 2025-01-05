@@ -5,7 +5,7 @@ import Symbol from "./Symbol";
 import CharText from "./CharText";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store";
-import { gameActions } from "@/store/gameSlicer";
+import { gameActions } from "@/store/reducers/gameSlicer";
 
 export default function PuzzleView() {
   const {

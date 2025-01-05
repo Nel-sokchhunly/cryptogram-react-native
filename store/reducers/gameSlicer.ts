@@ -3,7 +3,6 @@ import { getRandomQuote } from "@/service/dataset";
 import { identifyCharType } from "@/utils/qoute";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AlphabetCheckItem, AlphabetCheckSet, GameState } from "@/types/game";
-import { router } from "expo-router";
 
 const gameState: GameState = {
   quote: null,
@@ -44,10 +43,9 @@ export const gameSlice = createSlice({
     },
     endGame: (state) => {
       state.state = "ended";
-      router.push("/end");
     },
 
-    checkAnswer: (state) => {
+    checkAnswer: (state, action) => {
       // loop through the alphaInput and change the showCheck to true
       state.checkAttempts += 1;
       const newMap = JSON.parse(
@@ -88,21 +86,21 @@ export const gameSlice = createSlice({
     },
 
     // handle the input change
-    onAlphaInputFocus: (state, payload: PayloadAction<string>) => {
+    onAlphaInputFocus: (state, action: PayloadAction<string>) => {
       const newMap = JSON.parse(
         JSON.stringify(state.alphaInput)
       ) as AlphabetCheckSet;
-      const char = payload.payload;
+      const char = action.payload;
 
       newMap[char].isFocused = true;
 
       state.alphaInput = newMap;
     },
-    onAlphaInputBlur: (state, payload: PayloadAction<string>) => {
+    onAlphaInputBlur: (state, action: PayloadAction<string>) => {
       const newMap = JSON.parse(
         JSON.stringify(state.alphaInput)
       ) as AlphabetCheckSet;
-      const char = payload.payload;
+      const char = action.payload;
 
       newMap[char].isFocused = false;
 
@@ -110,7 +108,7 @@ export const gameSlice = createSlice({
     },
     updateAlphaInput: (
       state,
-      payload: PayloadAction<{
+      action: PayloadAction<{
         char: string;
         input: string;
       }>
@@ -118,8 +116,8 @@ export const gameSlice = createSlice({
       const newMap = JSON.parse(
         JSON.stringify(state.alphaInput)
       ) as AlphabetCheckSet;
-      const input = payload.payload.input;
-      const char = payload.payload.char;
+      const input = action.payload.input;
+      const char = action.payload.char;
 
       const currentChar = newMap[char];
 

@@ -1,5 +1,7 @@
+import BackgroundBtn from "@/components/common/BackgroundBtn";
 import SubHeaderText from "@/components/common/SubHeader";
 import { RootState } from "@/store";
+import { router } from "expo-router";
 import { SafeAreaView, View } from "react-native";
 import { useSelector } from "react-redux";
 
@@ -7,6 +9,10 @@ export default function End() {
   const { quote, timer, checkAttempts } = useSelector(
     (state: RootState) => state.gameMachine
   );
+
+  const handleBackHome = () => {
+    router.push("/");
+  };
 
   return (
     <SafeAreaView
@@ -48,6 +54,16 @@ export default function End() {
         >
           {quote?.quote}
         </SubHeaderText>
+      </View>
+      <View
+        style={{
+          height: "30%",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <BackgroundBtn onPress={handleBackHome}>Home</BackgroundBtn>
       </View>
     </SafeAreaView>
   );

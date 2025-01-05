@@ -1,4 +1,4 @@
-import { Quote } from "./qoute";
+import { Quote, UnlockedQuote } from "./qoute";
 
 export type AlphabetCheckItem = {
   inputValue: string;
@@ -19,4 +19,8 @@ export interface GameState {
   state: "idle" | "playing" | "ended";
   timer: number;
   checkAttempts: number;
+}
+
+export interface UnlockedQuoteState {
+  quote: UnlockedQuote[];
 }

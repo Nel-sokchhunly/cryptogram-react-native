@@ -10,14 +10,18 @@ import {
 } from "react-native";
 import BodyText from "@/components/common/BodyText";
 import TitleText from "@/components/common/TitleText";
-import { gameActions } from "@/store/gameSlicer";
+import { gameActions } from "@/store/reducers/gameSlicer";
 import backgroundImg from "@/assets/images/cryptogram-bg.jpg";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import GameHelpBottomSheet from "@/components/game/GameHelp";
 import { QuestionMarkCircleIcon } from "react-native-heroicons/outline";
+import { RootState } from "@/store";
 
 export default function Homescreen() {
   const dispatch = useDispatch();
+  const { quote: unlockedQuotes } = useSelector(
+    (state: RootState) => state.unlockedQuotes
+  );
 
   const handleStartGame = () => {
     dispatch(gameActions.startGame());
@@ -89,6 +93,9 @@ export default function Homescreen() {
         <TouchableOpacity onPress={handleStartGame}>
           <BodyText>Start Game</BodyText>
         </TouchableOpacity>
+
+        <BodyText>Unlocked Quotes: {unlockedQuotes.length}</BodyText>
+
         <GameHelpBottomSheet>
           <View
             style={{

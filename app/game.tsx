@@ -17,10 +17,11 @@ import {
 } from "react-native-heroicons/outline";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store";
-import { gameActions } from "@/store/gameSlicer";
+import { gameActions } from "@/store/reducers/gameSlicer";
 import GameHelpBottomSheet from "@/components/game/GameHelp";
 import { useEffect, useRef, useState } from "react";
 import { formatSeconds } from "@/utils/format";
+import { unlockedQuoteActions } from "@/store/reducers/unlockedQuoteSlicer";
 
 export default function Game() {
   const navigation = useNavigation();
@@ -35,7 +36,7 @@ export default function Game() {
 
   const handleCheck = () => {
     Keyboard.dismiss();
-    dispatch(gameActions.checkAnswer());
+    dispatch(gameActions.checkAnswer({}));
   };
 
   if (!quote)
@@ -60,6 +61,15 @@ export default function Game() {
       }, 1000);
     } else if (gameStatus === "ended") {
       if (stopwatchTimerRef.current) clearInterval(stopwatchTimerRef.current);
+      dispatch(
+        unlockedQuoteActions.addQuote({
+          quote,
+          timer,
+          checkAttempts,
+          unlockedAt: new Date().getTime(),
+        })
+      );
+      router.push("/end");
     }
 
     return () => {

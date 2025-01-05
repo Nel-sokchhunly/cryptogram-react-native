@@ -1,4 +1,4 @@
-import { gameActions } from "@/store/gameSlicer";
+import { gameActions } from "@/store/reducers/gameSlicer";
 import { toast } from "@backpackapp-io/react-native-toast";
 import React, { useEffect, useState } from "react";
 import {

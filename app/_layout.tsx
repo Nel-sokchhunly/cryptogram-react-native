@@ -2,6 +2,9 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { Stack } from "expo-router";
 import { Toasts } from "@backpackapp-io/react-native-toast";
 import { Provider } from "react-redux";
+import { PersistGate } from "redux-persist/integration/react";
+import { store, persistor } from "@/store";
+import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 
 import "./global.css";
 import {
@@ -25,8 +28,6 @@ import {
   Jost_800ExtraBold_Italic,
   Jost_900Black_Italic,
 } from "@expo-google-fonts/jost";
-import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
-import store from "@/store";
 
 export default function RootLayout() {
   useFonts({
@@ -52,32 +53,34 @@ export default function RootLayout() {
 
   return (
     <Provider store={store}>
-      <GestureHandlerRootView>
-        <BottomSheetModalProvider>
-          <Stack
-            screenOptions={{
-              headerShown: false,
-            }}
-          >
-            <Stack.Screen name="index" />
-            <Stack.Screen
-              name="game"
-              options={{
-                gestureEnabled: false,
+      <PersistGate loading={null} persistor={persistor}>
+        <GestureHandlerRootView>
+          <BottomSheetModalProvider>
+            <Stack
+              screenOptions={{
+                headerShown: false,
               }}
-            />
-            <Stack.Screen
-              name="end"
-              options={{
-                gestureEnabled: false,
-              }}
-            />
-          </Stack>
+            >
+              <Stack.Screen name="index" />
+              <Stack.Screen
+                name="game"
+                options={{
+                  gestureEnabled: false,
+                }}
+              />
+              <Stack.Screen
+                name="end"
+                options={{
+                  gestureEnabled: false,
+                }}
+              />
+            </Stack>
 
-          {/* toast */}
-          <Toasts />
-        </BottomSheetModalProvider>
-      </GestureHandlerRootView>
+            {/* toast */}
+            <Toasts />
+          </BottomSheetModalProvider>
+        </GestureHandlerRootView>
+      </PersistGate>
     </Provider>
   );
 }
